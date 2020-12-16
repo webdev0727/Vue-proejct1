@@ -1,0 +1,34 @@
+<template>
+  <div class="dashboard-container">
+    <component :is="currentRole" />
+  </div>
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+import adminDashboard from './admin'
+import editorDashboard from './editor'
+
+export default {
+  name: 'Dashboard',
+  components: { adminDashboard, editorDashboard },
+  data() {
+    return {
+      currentRole: 'adminDashboard'
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'roles'
+    ])
+  },
+  created() {
+    if (this.roles=='visitor') {
+      this.$router.push({"path":"/401"})
+    }
+    else if(this.roles!=='admin'){
+      this.currentRole = 'editorDashboard'
+    }
+  }
+}
+</script>
